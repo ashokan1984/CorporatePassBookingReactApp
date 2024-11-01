@@ -1,0 +1,147 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+        /* Reset some default styles */
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+      }
+
+      /* Center the form on the page */
+      body {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 100vh;
+          font-family: Arial, sans-serif;
+          background-color: #f0f2f5;
+      }
+
+      /* Form container */
+      .form-container {
+          background-color: #fff;
+          padding: 2rem;
+          border-radius: 8px;
+          box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+          max-width: 400px;
+          width: 100%;
+      }
+
+      /* Title */
+      .form-container h2 {
+          text-align: center;
+          color: #333;
+          margin-bottom: 1.5rem;
+      }
+
+      /* Labels */
+      .form-container label {
+          display: block;
+          font-size: 0.9rem;
+          margin-bottom: 0.5rem;
+          color: #555;
+      }
+
+      /* Input fields */
+      .form-container input[type="text"],
+      .form-container input[type="tel"],
+      .form-container input[type="email"] {
+          width: 100%;
+          padding: 0.8rem;
+          font-size: 1rem;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          margin-bottom: 1.2rem;
+          transition: border-color 0.3s;
+      }
+
+      .form-container input[type="text"]:focus,
+      .form-container input[type="tel"]:focus,
+      .form-container input[type="email"]:focus {
+          border-color: #007bff;
+          outline: none;
+      }
+
+      /* Save button */
+      .form-container button {
+          width: 100%;
+          padding: 0.8rem;
+          background-color: #007bff;
+          color: #fff;
+          font-size: 1rem;
+          font-weight: bold;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+      }
+
+      .form-container button:hover {
+          background-color: #0056b3;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 1em;
+        font-family: 'Arial', sans-serif;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+      
+      thead {
+        background-color: #007BFF; /* Blue header */
+        color: white;
+      }
+      
+      th, td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      
+      tr {
+        transition: background-color 0.3s;
+      }
+      
+      tr:hover {
+        background-color: #f1f1f1; /* Light gray on hover */
+      }
+      
+      button {
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      
+      button:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+      }
+      
+      .error-message {
+        color: red;
+        margin: 20px 0;
+        font-weight: bold;
+      }
+      
+      .loading-message {
+        font-size: 1.2em;
+        color: #555;
+      }
+  

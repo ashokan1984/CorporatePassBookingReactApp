@@ -1,0 +1,52 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 1em;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  thead {
+    background-color: #007BFF; /* Blue header */
+    color: white;
+  }
+  
+  th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  tr {
+    transition: background-color 0.3s;
+  }
+  
+  tr:hover {
+    background-color: #f1f1f1; /* Light gray on hover */
+  }
+  
+  button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  .error-message {
+    color: red;
+    margin: 20px 0;
+    font-weight: bold;
+  }
+  
+  .loading-message {
+    font-size: 1.2em;
+    color: #555;
+  }

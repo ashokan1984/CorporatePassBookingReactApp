@@ -1,0 +1,14 @@
+/* components/Header.css */
+
+.app-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .app-header h1 {
+    margin: 0;
+    font-size: 2rem;
+  }
+  
