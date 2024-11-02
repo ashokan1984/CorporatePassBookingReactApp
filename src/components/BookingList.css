@@ -39,4 +39,29 @@
   td {
     color: #555;
   }
+
+  /* BookingList.css */
+
+  select {
+    padding: 10px; /* Adds padding for better click area */
+    margin: 10px 0; /* Adds space of 10px on top and bottom between dropdowns */
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 16px; /* Larger font size for readability */
+    background-color: #f9f9f9; /* Light background color */
+    transition: border-color 0.3s; /* Smooth border color transition */
+  }
+  
+  /* Change border color on focus */
+  select:focus {
+    border-color: #007bff; /* Change border color to blue on focus */
+    outline: none; /* Remove default outline */
+  }
+  
+  /* Optional: Add styles for disabled state */
+  select:disabled {
+    background-color: #e9ecef; /* Light gray background for disabled */
+    cursor: not-allowed; /* Change cursor to indicate disabled state */
+  }
+
   
