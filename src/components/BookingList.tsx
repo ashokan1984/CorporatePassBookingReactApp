@@ -33,39 +33,47 @@ const BookingList = (): JSX.Element => {
   const [bookingDateTime, setBookingDateTime] = useState("");
   const [isAddingBooking, setIsAddingBooking] = useState(false);
   const [editingBookingId, setEditingBookingId] = useState<string | null>(null);
+  
+  // State for viewing booking details
+  const [viewBooking, setViewBooking] = useState<Booking | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [bookingsPerPage] = useState(5); // Change this value for more or less bookings per page
 
   useEffect(() => {
-    const fetchBookings = async () => {
-      try {
-        const response = await httpService.get("Booking/GetAll");
-        setBookings(response.data);
-      } catch (error) {
-        console.error("Failed to fetch bookings", error);
-      }
-    };
-
-    const fetchFacilities = async () => {
-      try {
-        const response = await httpService.get("Facility/GetAll");
-        setFacilities(response.data);
-      } catch (error) {
-        console.error("Failed to fetch facilities", error);
-      }
-    };
-
-    const fetchVisitors = async () => {
-      try {
-        const response = await httpService.get("Visitor/GetAll");
-        setVisitors(response.data);
-      } catch (error) {
-        console.error("Failed to fetch visitors", error);
-      }
-    };
-
     fetchBookings();
     fetchFacilities();
     fetchVisitors();
   }, []);
+
+  const fetchBookings = async () => {
+    try {
+      const response = await httpService.get("Booking/GetAll");
+      setBookings(response.data);
+    } catch (error) {
+      console.error("Failed to fetch bookings", error);
+    }
+  };
+
+  const fetchFacilities = async () => {
+    try {
+      const response = await httpService.get("Facility/GetAll");
+      setFacilities(response.data);
+    } catch (error) {
+      console.error("Failed to fetch facilities", error);
+    }
+  };
+
+  const fetchVisitors = async () => {
+    try {
+      const response = await httpService.get("Visitor/GetAll");
+      setVisitors(response.data);
+    } catch (error) {
+      console.error("Failed to fetch visitors", error);
+    }
+  };
 
   const handleAddBooking = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,7 +82,7 @@ const BookingList = (): JSX.Element => {
     try {
       const response = await httpService.post("Booking/Create", newBooking);
       if (response.status === 200 || response.status === 201) {
-        setBookings((prevBookings) => [...prevBookings, response.data]);
+        await fetchBookings(); // Refresh bookings list after adding a new booking
         resetForm();
       } else {
         console.error("Failed to add booking");
@@ -93,10 +101,7 @@ const BookingList = (): JSX.Element => {
     try {
       const response = await httpService.put("Booking/Update", updatedBooking);
       if (response.status === 200 || response.status === 201) {
-        const updatedBookings = bookings.map((booking) =>
-          booking.id === editingBookingId ? response.data : booking
-        );
-        setBookings(updatedBookings);
+        await fetchBookings(); // Refresh bookings list after updating
         resetForm();
       } else {
         console.error("Failed to update booking");
@@ -115,6 +120,16 @@ const BookingList = (): JSX.Element => {
     setIsAddingBooking(true);
   };
 
+  const handleViewClick = async (bookingId: string) => {
+    try {
+      const response = await httpService.get(`Booking/GetById/${bookingId}`);
+      setViewBooking(response.data);
+      setIsModalOpen(true); // Open the modal to view booking details
+    } catch (error) {
+      console.error("Failed to fetch booking details", error);
+    }
+  };
+
   const resetForm = () => {
     setFacilityId("");
     setVisitorId("");
@@ -123,6 +138,13 @@ const BookingList = (): JSX.Element => {
     setIsAddingBooking(false);
     setEditingBookingId(null);
   };
+
+  // Pagination logic
+  const indexOfLastBooking = currentPage * bookingsPerPage;
+  const indexOfFirstBooking = indexOfLastBooking - bookingsPerPage;
+  const currentBookings = bookings.slice(indexOfFirstBooking, indexOfLastBooking);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
     <div>
@@ -192,7 +214,7 @@ const BookingList = (): JSX.Element => {
           </tr>
         </thead>
         <tbody>
-          {bookings.map((booking) => (
+          {currentBookings.map((booking) => (
             <tr key={booking.id}>
               <td>{booking.id}</td>
               <td>{booking.visitor.name}</td>
@@ -202,11 +224,37 @@ const BookingList = (): JSX.Element => {
               <td>{new Date(booking.bookingDateTime).toLocaleDateString()}</td>
               <td>
                 <button onClick={() => handleEditClick(booking)}>Edit</button>
+                <button onClick={() => handleViewClick(booking.id)}>View</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {/* Pagination controls */}
+      <div className="pagination">
+        {Array.from({ length: Math.ceil(bookings.length / bookingsPerPage) }, (_, i) => (
+          <button key={i + 1} onClick={() => paginate(i + 1)} className={currentPage === i + 1 ? "active" : ""}>
+            {i + 1}
+          </button>
+        ))}
+      </div>
+
+      {/* Modal for viewing booking details */}
+      {isModalOpen && viewBooking && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={() => setIsModalOpen(false)}>&times;</span>
+            <h2>Booking Details</h2>
+            <p><strong>Booking ID:</strong> {viewBooking.id}</p>
+            <p><strong>Facility:</strong> {viewBooking.facility.name}</p>
+            <p><strong>Visitor:</strong> {viewBooking.visitor.name}</p>
+            <p><strong>Amenities:</strong> {viewBooking.facility.amenities.join(", ")}</p>
+            <p><strong>Quantity:</strong> {viewBooking.quantity}</p>
+            <p><strong>Booking Date:</strong> {new Date(viewBooking.bookingDateTime).toLocaleString()}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

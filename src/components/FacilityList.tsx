@@ -23,6 +23,10 @@ const FacilityList = (): JSX.Element => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState<Facility | null>(null);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [facilitiesPerPage] = useState(5); // Change this value for more or less facilities per page
+
   useEffect(() => {
     const fetchFacilities = async () => {
       try {
@@ -57,7 +61,7 @@ const FacilityList = (): JSX.Element => {
 
     try {
       const response = await httpService.post("facility", newFacility);
-      if ( response.status === 201 || response.status === 200 ) {
+      if (response.status === 201 || response.status === 200) {
         setFacilities((prevFacilities) => [...prevFacilities, response.data]);
         resetForm();
       } else {
@@ -82,8 +86,8 @@ const FacilityList = (): JSX.Element => {
     };
 
     try {
-      const response = await httpService.put("facility/${editingFacilityId}", updatedFacility);
-      if ( response.status === 200 || response.status === 201 ) {
+      const response = await httpService.put(`facility/${editingFacilityId}`, updatedFacility);
+      if (response.status === 200 || response.status === 201) {
         const updatedFacilities = facilities.map((facility) =>
           facility.id === editingFacilityId ? response.data : facility
         );
@@ -116,6 +120,13 @@ const FacilityList = (): JSX.Element => {
     setIsAddingFacility(false);
     setEditingFacilityId(null);
   };
+
+  // Pagination logic
+  const indexOfLastFacility = currentPage * facilitiesPerPage;
+  const indexOfFirstFacility = indexOfLastFacility - facilitiesPerPage;
+  const currentFacilities = facilities.slice(indexOfFirstFacility, indexOfLastFacility);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
     <div>
@@ -179,7 +190,7 @@ const FacilityList = (): JSX.Element => {
           </tr>
         </thead>
         <tbody>
-          {facilities.map((facility) => (
+          {currentFacilities.map((facility) => (
             <tr key={facility.id}>
               <td>{facility.id}</td>
               <td>{facility.name}</td>
@@ -195,6 +206,15 @@ const FacilityList = (): JSX.Element => {
           ))}
         </tbody>
       </table>
+
+      {/* Pagination controls */}
+      <div className="pagination">
+        {Array.from({ length: Math.ceil(facilities.length / facilitiesPerPage) }, (_, i) => (
+          <button key={i + 1} onClick={() => paginate(i + 1)} className={currentPage === i + 1 ? "active" : ""}>
+            {i + 1}
+          </button>
+        ))}
+      </div>
 
       {isPopupOpen && selectedFacility && (
         <div className="popup">
